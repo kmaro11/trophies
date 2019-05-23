@@ -13,7 +13,9 @@ export default new Vuex.Store({
     userLogout: false,
     userSignIn: false,
     pushStatus: Boolean,
-    dbData: []
+    dbData: [],
+    userId: ''
+
   },
   mutations: {
     setUser (state, payload) {
@@ -30,6 +32,9 @@ export default new Vuex.Store({
     },
     retrivedData (state, payload) {
       state.dbData = payload
+    },
+    signInUserId (state, payload){
+      state.userId = payload
     }
   },
   actions: {
@@ -55,10 +60,12 @@ export default new Vuex.Store({
       })
     },
     signUserIn ({commit}, payload) {
+      console.log(commit('signInUserId', payload))
       firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
-        .then(() => {
+        .then(data => {
           router.push('/')
           commit('signInUser', true)
+          commit('signInUserId', data.user.uid)
         }).catch(
         error => {
           console.log(error)
@@ -66,7 +73,7 @@ export default new Vuex.Store({
       )
     },
     pushTrophies ({commit}, payload) {
-      db.collection('SpidermanGame').doc('Trophies').set({
+      db.collection('SpidermanGame').doc().set({
         user_id: 'blach',
         trophies: payload
       }).then(() => {
@@ -77,8 +84,6 @@ export default new Vuex.Store({
     getTrophies ({commit}){
       db.collection('SpidermanGame').doc('Trophies').get()
           .then(data => {
-            // console.log(typeof data.data().trophies)
-            // console.log(data.data())
             let dbData = data.data().trophies
             commit('retrivedData', dbData)
 

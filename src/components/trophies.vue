@@ -414,7 +414,6 @@
                 }
             },
             gettedDataFromDb() {
-                // console.log(this.$store.getters.dataFromDb)
                 return this.$store.getters.dataFromDb
             }
 
@@ -467,7 +466,6 @@
         created() {
             this.allCompletedTrophies()
             this.getFromDb()
-            // console.log((this.gettedDataFromDb && this.gettedDataFromDb.length > 0))
             if (this.gettedDataFromDb && this.gettedDataFromDb.length > 0) {
                 this.filterTrophies('all')
 
