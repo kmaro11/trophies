@@ -1,8 +1,5 @@
 <template>
     <div>
-
-
-
         <Navigation/>
         <section class="flex items-center">
             <div v-for="achievement in achievements">
