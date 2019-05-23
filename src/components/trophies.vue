@@ -2,7 +2,7 @@
     <div>
         <Navigation/>
         <section class="flex items-center">
-            <div v-for="achievement in achievements">
+            <div v-for="achievement in achievements" :key="achievement.name">
                 <div>
                     <p>{{achievement.name}}</p>
                     <p>{{allTrophies(achievement.action)}}</p>
