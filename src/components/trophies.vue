@@ -10,7 +10,7 @@
                 </div>
             </div>
         </section>
-        <button @click="save">Save</button>
+        <button @click="pushToDb">Save</button>
 
         <div class="flex flex-row">
             <p>Trophies</p>
@@ -399,8 +399,6 @@
                         subtitle: 'Complete all objectives in a base'
                     },
                 ],
-
-
             }
         },
         components: {
@@ -408,50 +406,43 @@
         },
         computed: {
             completedMission() {
-                if (this.storedAchievements) {
-                    return this.storedAchievements.filter(trop => trop.completed)
+                if (this.gettedDataFromDb) {
+                    return this.gettedDataFromDb.filter(trop => trop.completed)
                 } else {
 
                     return this.spiderman.filter(trop => trop.completed)
                 }
             },
+            gettedDataFromDb() {
+                // console.log(this.$store.getters.dataFromDb)
+                return this.$store.getters.dataFromDb
+            }
 
         },
         methods: {
-            save() {
-                if (this.storedAchievements) {
-                    localStorage.setItem("games", JSON.stringify(this.storedAchievements))
-                } else {
-                    localStorage.setItem("games", JSON.stringify(this.spiderman))
-                }
-
-            },
-            savedAchievements() {
-                this.storedAchievements = JSON.parse(localStorage.getItem("games"))
-            },
             allTrophies(type) {
-                if (this.storedAchievements) {
-                    return this.storedAchievements.filter(action => action.type === type).length
+                if (this.gettedDataFromDb) {
+                    return this.gettedDataFromDb.filter(action => action.type === type).length
                 } else {
                     return this.spiderman.filter(action => action.type === type).length
                 }
 
             },
             allCompletedTrophies(type) {
-                if (this.storedAchievements) {
-                    return this.storedAchievements.filter(action => (action.type === type && action.completed)).length
+                if (this.gettedDataFromDb) {
+                    return this.gettedDataFromDb.filter(action => (action.type === type && action.completed)).length
                 } else {
                     return this.spiderman.filter(action => (action.type === type && action.completed)).length
                 }
             },
             filterTrophies(action) {
-                if (this.storedAchievements) {
+                if (this.gettedDataFromDb) {
                     if (action === 'completed') {
-                        this.filteredAchievements = this.storedAchievements.filter(action => action.completed)
+                        this.filteredAchievements = this.gettedDataFromDb.filter(action => action.completed)
                     } else if (action === 'remain') {
-                        this.filteredAchievements = this.storedAchievements.filter(action => !action.completed)
+                        this.filteredAchievements = this.gettedDataFromDb.filter(action => !action.completed)
                     } else {
-                        this.filteredAchievements = this.storedAchievements
+                        this.filteredAchievements = this.gettedDataFromDb
                     }
 
                 } else {
@@ -464,12 +455,24 @@
                     }
                 }
             },
+            pushToDb() {
+                this.$store.dispatch('pushTrophies', this.spiderman)
+            },
+            getFromDb() {
+                this.$store.dispatch('getTrophies')
+
+            }
 
         },
         created() {
-            this.savedAchievements()
             this.allCompletedTrophies()
-            this.filterTrophies('all')
+            this.getFromDb()
+            // console.log((this.gettedDataFromDb && this.gettedDataFromDb.length > 0))
+            if (this.gettedDataFromDb && this.gettedDataFromDb.length > 0) {
+                this.filterTrophies('all')
+
+            }
+
         }
     }
 
