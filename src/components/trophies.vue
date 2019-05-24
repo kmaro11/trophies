@@ -4,23 +4,21 @@
         <section class="flex items-center">
             <div v-for="achievement in achievements" :key="achievement.name">
                 <div>
-                    <!--<p>{{achievement.name}}</p>-->
-                    <!--<p>{{allTrophies(achievement.action)}}</p>-->
-                    <!--<p>{{allCompletedTrophies(achievement.action)}}</p>-->
+                    <p>{{achievement.name}}</p>
+                    <p>{{allTrophies(achievement.action)}}</p>
+                    <p>{{allCompletedTrophies(achievement.action)}}</p>
                 </div>
             </div>
         </section>
         <button @click="pushToDb">Save</button>
-        <!--<button @click="trophiesFromDb">db</button>-->
-
-        <!--<div class="flex flex-row">-->
-        <!--<p>Trophies</p>-->
-        <!--<p>{{spiderman.length}}</p>-->
-        <!--</div>-->
-        <!--<div class="flex flex-row items-center justify-start">-->
-        <!--<p class="">completed</p>-->
-        <!--<p>{{completedMission.length}}</p>-->
-        <!--</div>-->
+        <div class="flex flex-row">
+            <p>Trophies</p>
+            <p>{{spiderman.length}}</p>
+        </div>
+        <div class="flex flex-row items-center justify-start">
+            <p class="">completed</p>
+            <p>{{completedTrophiesId.length}}</p>
+        </div>
         <div class="flex">
             <div v-for="item in filter">
                 <button @click="filterTrophies(item.action)" class="m-5">{{item.name}}</button>
@@ -471,26 +469,17 @@
             if (dbData === item.id) {
               item.completed = true
             }
-
           })
         })
       },
-      // allTrophies (type) {
-      //   if (this.gettedDataFromDb) {
-      //     return this.gettedDataFromDb.filter(action => action.type === type).length
-      //   } else {
-      //     return this.spiderman.filter(action => action.type === type).length
-      //   }
-      //
-      // },
+      allTrophies (type) {
+        return this.spiderman.filter(action => action.type === type).length
+      },
       allCompletedTrophies (type) {
-        if (this.gettedDataFromDb) {
-          return this.gettedDataFromDb.filter(action => (action.type === type && action.completed)).length
-        } else {
-          return this.spiderman.filter(action => (action.type === type && action.completed)).length
-        }
+        return this.spiderman.filter(action => (action.type === type && action.completed)).length
       },
       filterTrophies (action) {
+        this.trophiesFromDb()
         if (action === 'completed') {
           this.filteredAchievements = this.spiderman.filter(action => action.completed)
         } else if (action === 'remain') {
@@ -504,22 +493,15 @@
       },
       getFromDb () {
         this.$store.dispatch('getTrophies',)
-
       }
-
     },
     created () {
       this.allCompletedTrophies()
       this.getFromDb()
+      this.filterTrophies('all')
       this.trophiesFromDb()
-      if (this.gettedDataFromDb && this.gettedDataFromDb.length > 0) {
-        this.filterTrophies('all')
-
-      }
-
     }
   }
-
 
 </script>
 <style scoped lang="scss">
