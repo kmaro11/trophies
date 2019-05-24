@@ -73,7 +73,7 @@ export default new Vuex.Store({
       )
     },
     pushTrophies ({commit}, payload) {
-      db.collection('SpidermanGame').doc().set({
+      db.collection('SpidermanGame').doc('Trophies').set({
         user_id: 'blach',
         trophies: payload
       }).then(() => {
