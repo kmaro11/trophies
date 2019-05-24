@@ -1,6 +1,7 @@
 <template>
     <div>
         <Navigation/>
+        <div class="container">
         <section class="flex items-center">
             <div v-for="achievement in achievements" :key="achievement.name">
                 <div>
@@ -37,6 +38,8 @@
 
         </div>
     </div>
+
+        </div>
 
 
 </template>

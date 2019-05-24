@@ -1,15 +1,18 @@
 <template>
     <div class="h-full">
         <Navigation/>
-        <div v-if="!userLoginStatus">
-            <h1>You not Sign in yet</h1>
-        </div>
-        <div v-else>
-            <h1>You just Sign in</h1>
+        <div class="container">
+            <div v-if="!userLoginStatus">
+                <h1>You not Sign in yet</h1>
+            </div>
+            <div v-else>
+                <h1>You just Sign in</h1>
 
-            <button @click.prevent="pushToDb">push</button>
-            <button @click.prevent="getFromDb">get</button>
+                <button @click.prevent="pushToDb">push</button>
+                <button @click.prevent="getFromDb">get</button>
 
+
+            </div>
 
         </div>
 
