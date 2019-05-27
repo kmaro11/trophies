@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Navigation/>
+        <!--<Navigation/>-->
         <div class="container">
             <section class="flex items-center">
                 <div v-for="achievement in achievements" :key="achievement.name">
@@ -20,23 +20,25 @@
                 <p class="">completed</p>
                 <p>{{completedTrophiesId.length}}</p>
             </div>
-            <div class="flex">
-                <div v-for="item in filter" :key="item.name">
-                    <button @click="filterTrophies(item.action)" class="m-5">{{item.name}}</button>
+            <div class="flex item-center justify-center  " style=" ">
+                <div v-for="item in filter" :key="item.name" class="w-32 text-center border-solid border mr-4 ml-4 h-8 flex item-center justify-center rounded-lg" style="color: #ff9900; border-color:#ff9900">
+                    <button @click="filterTrophies(item.action)" class="w-full">{{item.name}}</button>
                 </div>
             </div>
-
-            <div v-for="game in filteredAchievements" :key="game.title">
-                <div class="flex flex-row items-center mt-5 mb-5">
-                    <div class="trophies__trophie-icon mr-5" :class="game.type"></div>
-                    <div class="flex flex-col mr-5">
-                        <div> {{game.title}}</div>
-                        <div>{{game.subtitle}}</div>
+            <div class="overflow-y-auto" style="height: 340px">
+                <div v-for="game in filteredAchievements" :key="game.title">
+                    <div class="flex flex-row items-center mt-5 mb-5">
+                        <div class="trophies__trophie-icon mr-5" :class="game.type"></div>
+                        <div class="flex flex-col mr-5">
+                            <div> {{game.title}}</div>
+                            <div>{{game.subtitle}}</div>
+                        </div>
+                        <input type='checkbox' v-model="game.completed">
                     </div>
-                    <input type='checkbox' v-model="game.completed">
-                </div>
 
+                </div>
             </div>
+
         </div>
 
     </div>
@@ -44,7 +46,7 @@
 
 </template>
 <script>
-    import Navigation from '@/components/Navigation'
+    // import Navigation from '@/components/Navigation'
     import Spiderman from '@/spiderman'
 
     export default {
@@ -96,7 +98,7 @@
             }
         },
         components: {
-            Navigation,
+            // Navigation,
         },
         computed: {
             completedTrophiesId() {
@@ -155,6 +157,7 @@
             align-items: center;
             margin: 20px 0;
         }
+
 
         &__trophie-icon {
             width: 44px;

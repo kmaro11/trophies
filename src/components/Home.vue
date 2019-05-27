@@ -1,6 +1,6 @@
 <template>
-    <div class="h-full">
-        <Navigation/>
+    <div class="h-full" style="background: #393939">
+        <!--<Navigation/>-->
         <div class="container">
             <div v-if="!userLoginStatus">
                 <h1>You not Sign in yet</h1>
@@ -29,38 +29,46 @@
     </div>
 </template>
 <script>
-  import Navigation from '@/components/Navigation'
+    // import Navigation from '@/components/Navigation'
 
-  export default {
-    name: 'home',
-    data () {
-      return {
-        sideBar: [
-          {
-            name: 'Games'
-          },
-          {
-            name: 'User'
-          }
-        ],
-        // signIn: false
-      }
+    export default {
+        name: 'home',
+        data() {
+            return {
+                sideBar: [
+                    {
+                        name: 'Games'
+                    },
+                    {
+                        name: 'User'
+                    }
+                ],
+                // signIn: false
+            }
 
-    },
-    components: {
-      Navigation,
-    },
-    computed: {
-      userLoginStatus () {
-        return this.$store.getters.signInStatus
-      }
-    },
-    methods: {
-      getFromDb () {
-        this.$store.dispatch('getTrophies')
+        },
+        components: {
+            // Navigation,
+        },
+        computed: {
+            userLoginStatus() {
+                return this.$store.getters.signInStatus
+            }
+        },
+        methods: {
+            getFromDb() {
+                this.$store.dispatch('getTrophies')
 
-      }
+            }
+        }
+
+    }
+</script>
+<style scoped lang="scss">
+    .trophies__background-img {
+        width: 100%;
+        background: url("../img/console@2x.png") no-repeat center;
     }
 
-  }
-</script>
+
+</style>

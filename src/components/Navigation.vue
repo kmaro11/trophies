@@ -1,12 +1,13 @@
 <template>
-    <nav class="bg-blue-800 h-20 flex items-center pl-12 pr-12" style="background: #b23850">
+    <nav class="h-20 flex items-center pl-12 pr-12 absolute w-4/5 border-solid border-t border-b" style="top:50px; left: 50%; transform: translateX(-50%); border-color: #f3843e">
+        <img src="../img/logo@2x.png" alt="" class="w-full absolute" style="max-width: 200px; left: 50%; transform: translateX(-50%);">
         <div class="flex">
             <div v-for="item in menu" :key="item.title">
                 <router-link
                         v-if="item.type === 'menu'"
                         router
                         :to="item.link"
-                        class="flex items-center text-white p-4" style="color: #e7e3d4">
+                        class="flex items-center text-white p-4 font-bold" style="color: #ff5a09">
                     {{item.name}}
                 </router-link>
             </div>
@@ -19,12 +20,12 @@
                         router
                         :to="item.link"
 
-                        class="flex items-center text-white p-4" style="color: #e7e3d4">
+                        class="flex items-center text-white p-4 font-bold" style="color: #ff5a09">
                     {{item.name}}
                 </router-link>
             </div>
         </div>
-        <button @click.prevent="logout()" class="text-white p-4" style="color: #e7e3d4">
+        <button @click.prevent="logout()" class="text-white p-4 font-bold" style="color: #ff5a09">
 
             Logout
         </button>
@@ -83,3 +84,9 @@
     }
   }
 </script>
+
+<!--position: absolute;-->
+<!--width: 80%;-->
+<!--top: 90px;-->
+<!--left: 50%;-->
+<!--transform: translateX(-50%);-->
