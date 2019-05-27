@@ -1,6 +1,5 @@
 <template>
     <div>
-    <Navigation/>
         <div class="w-full h-full relative">
             <div class="flex flex-col max-w-xl w-full bg-white m-auto">
                 <p class="m-auto">sign up</p>
@@ -14,7 +13,6 @@
     </div>
 </template>
 <script>
-    import Navigation from '@/components/Navigation'
     export default {
         data () {
             return {
@@ -24,7 +22,6 @@
             }
         },
         components: {
-            Navigation,
         },
         computed: {},
         methods: {
