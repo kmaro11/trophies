@@ -1,5 +1,5 @@
 <template>
-    <div class="h-full" style="background: #393939">
+    <div class="h-full bg-white">
         <!--<Navigation/>-->
         <div class="container">
             <div v-if="!userLoginStatus">
@@ -7,25 +7,10 @@
             </div>
             <div v-else>
                 <h1>You just Sign in</h1>
-
                 <button @click.prevent="pushToDb">push</button>
                 <button @click.prevent="getFromDb">get</button>
-
-
             </div>
-
         </div>
-
-        <!--<div class="flex w-full h-full">-->
-        <!--<div class="w-32 p-6">-->
-        <!--<template v-for="item in sideBar">-->
-        <!--<button class="p-2">{{item.name}}</button>-->
-        <!--</template>-->
-        <!--</div>-->
-        <!--<div class="w-full">Content</div>-->
-
-        <!--</div>-->
-
     </div>
 </template>
 <script>

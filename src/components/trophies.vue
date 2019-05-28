@@ -11,27 +11,37 @@
                     </div>
                 </div>
             </section>
-            <button @click="pushToDb">Save</button>
-            <div class="flex flex-row">
-                <p>Trophies</p>
-                <p>{{spiderman.length}}</p>
-            </div>
-            <div class="flex flex-row items-center justify-start">
-                <p class="">completed</p>
-                <p>{{completedTrophiesId.length}}</p>
-            </div>
-            <div class="flex item-center justify-center  " style=" ">
-                <div v-for="item in filter" :key="item.name" class="w-32 text-center border-solid border mr-4 ml-4 h-8 flex item-center justify-center rounded-lg" style="color: #ff9900; border-color:#ff9900">
-                    <button @click="filterTrophies(item.action)" class="w-full">{{item.name}}</button>
+            <div class="flex">
+                <div class="border border-color-dark-blue border-solid w-64 h-8 rounded-lg">
+                    <div class="bg-yellow h-8 rounded-lg" :class='{width: `${progressBar}%` }'></div>
                 </div>
+
             </div>
-            <div class="overflow-y-auto" style="height: 340px">
+            <button @click="pushToDb">Save</button>
+            <!--<div class="flex flex-row">-->
+            <!--<p>Trophies</p>-->
+            <!--<p>{{spiderman.length}}</p>-->
+            <!--</div>-->
+            <!--<div class="flex flex-row items-center justify-start">-->
+            <!--<p class="">completed</p>-->
+            <!--<p>{{completedTrophiesId.length}}</p>-->
+            <!--</div>-->
+            <div class="flex item-center justify-center">
+                <button
+                        class="w-32 text-dark-blue border-solid border mr-4 ml-4 h-8 flex item-center justify-center rounded-lg border-color-dark-blue hover:bg-yellow"
+                        v-for="item in filter"
+                        :key="item.name"
+                        @click="filterTrophies(item.action)">
+                    {{item.name}}
+                </button>
+            </div>
+            <div class="overflow-y-auto max-width-half mt-8 ml-auto mr-auto" style="height: 380px">
                 <div v-for="game in filteredAchievements" :key="game.title">
-                    <div class="flex flex-row items-center mt-5 mb-5">
+                    <div class="flex flex-row items-center mt-5 mb-5 bg-brown rounded-lg">
                         <div class="trophies__trophie-icon mr-5" :class="game.type"></div>
                         <div class="flex flex-col mr-5">
-                            <div> {{game.title}}</div>
-                            <div>{{game.subtitle}}</div>
+                            <div class="text-white"> {{game.title}}</div>
+                            <div class="text-white">{{game.subtitle}}</div>
                         </div>
                         <input type='checkbox' v-model="game.completed">
                     </div>
@@ -46,108 +56,111 @@
 
 </template>
 <script>
-    // import Navigation from '@/components/Navigation'
-    import Spiderman from '@/spiderman'
+  // import Navigation from '@/components/Navigation'
+  import Spiderman from '@/spiderman'
 
-    export default {
-        data() {
-            return {
-                menu: [
-                    {
-                        name: 'Spiderman',
-                        action: 'spiderman',
-                        logo: 'spiderman.jpeg',
-                    }
-                ],
-                spiderman: Spiderman,
-                storedAchievements: [],
-                filteredAchievements: [],
-                filter: [
-                    {
-                        name: 'All',
-                        action: 'all'
-                    },
-                    {
-                        name: 'Completed',
-                        action: 'completed'
-                    },
-                    {
-                        name: 'Remain',
-                        action: 'remain'
-                    }
-                ],
-                achievements: [
-                    {
-                        name: 'platinum',
-                        action: 'platinum'
-                    },
-                    {
-                        name: 'gold',
-                        action: 'gold'
-                    },
-                    {
-                        name: 'silver',
-                        action: 'silver'
-                    },
-                    {
-                        name: 'bronze',
-                        action: 'bronze'
-                    }
-                ],
+  export default {
+    data () {
+      return {
+        menu: [
+          {
+            name: 'Spiderman',
+            action: 'spiderman',
+            logo: 'spiderman.jpeg',
+          }
+        ],
+        spiderman: Spiderman,
+        storedAchievements: [],
+        filteredAchievements: [],
+        filter: [
+          {
+            name: 'All',
+            action: 'all'
+          },
+          {
+            name: 'Completed',
+            action: 'completed'
+          },
+          {
+            name: 'Remain',
+            action: 'remain'
+          }
+        ],
+        achievements: [
+          {
+            name: 'platinum',
+            action: 'platinum'
+          },
+          {
+            name: 'gold',
+            action: 'gold'
+          },
+          {
+            name: 'silver',
+            action: 'silver'
+          },
+          {
+            name: 'bronze',
+            action: 'bronze'
+          }
+        ],
 
+      }
+    },
+    components: {
+      // Navigation,
+    },
+    computed: {
+      completedTrophiesId () {
+        return (this.spiderman.filter(item => item.completed)).map(x => x.id)
+      },
+      gettedDataFromDb () {
+        return this.$store.getters.dataFromDb
+      },
+      progressBar () {
+        return this.completedTrophiesId.length * 100 / this.spiderman.length / 2
+      }
+    },
+    methods: {
+      trophiesFromDb () {
+        this.spiderman.filter(item => {
+          this.gettedDataFromDb.map(dbData => {
+            if (dbData === item.id) {
+              item.completed = true
             }
-        },
-        components: {
-            // Navigation,
-        },
-        computed: {
-            completedTrophiesId() {
-                return (this.spiderman.filter(item => item.completed)).map(x => x.id)
-            },
-            gettedDataFromDb() {
-                return this.$store.getters.dataFromDb
-            },
-        },
-        methods: {
-            trophiesFromDb() {
-                this.spiderman.filter(item => {
-                    this.gettedDataFromDb.map(dbData => {
-                        if (dbData === item.id) {
-                            item.completed = true
-                        }
-                    })
-                })
-            },
-            allTrophies(type) {
-                return this.spiderman.filter(action => action.type === type).length
-            },
-            allCompletedTrophies(type) {
-                return this.spiderman.filter(action => (action.type === type && action.completed)).length
-            },
-            filterTrophies(action) {
-                this.trophiesFromDb()
-                if (action === 'completed') {
-                    this.filteredAchievements = this.spiderman.filter(action => action.completed)
-                } else if (action === 'remain') {
-                    this.filteredAchievements = this.spiderman.filter(action => !action.completed)
-                } else {
-                    this.filteredAchievements = this.spiderman
-                }
-            },
-            pushToDb() {
-                this.$store.dispatch('pushTrophies', this.completedTrophiesId)
-            },
-            getFromDb() {
-                this.$store.dispatch('getTrophies',)
-            }
-        },
-        created() {
-            this.allCompletedTrophies()
-            this.getFromDb()
-            this.filterTrophies('all')
-            this.trophiesFromDb()
+          })
+        })
+      },
+      allTrophies (type) {
+        return this.spiderman.filter(action => action.type === type).length
+      },
+      allCompletedTrophies (type) {
+        return this.spiderman.filter(action => (action.type === type && action.completed)).length
+      },
+      filterTrophies (action) {
+        this.trophiesFromDb()
+        if (action === 'completed') {
+          this.filteredAchievements = this.spiderman.filter(action => action.completed)
+        } else if (action === 'remain') {
+          this.filteredAchievements = this.spiderman.filter(action => !action.completed)
+        } else {
+          this.filteredAchievements = this.spiderman
         }
+      },
+      pushToDb () {
+        this.$store.dispatch('pushTrophies', this.completedTrophiesId)
+      },
+      getFromDb () {
+        this.$store.dispatch('getTrophies',)
+      }
+    },
+    created () {
+      this.allCompletedTrophies()
+      this.getFromDb()
+      this.filterTrophies('all')
+      this.trophiesFromDb()
     }
+  }
 
 </script>
 <style scoped lang="scss">
