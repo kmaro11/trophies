@@ -2,31 +2,32 @@
     <div>
         <!--<Navigation/>-->
         <div class="container">
-            <section class="flex items-center">
-                <div v-for="achievement in achievements" :key="achievement.name">
-                    <div>
-                        <p>{{achievement.name}}</p>
-                        <p>{{allTrophies(achievement.action)}}</p>
-                        <p>{{allCompletedTrophies(achievement.action)}}</p>
-                    </div>
-                </div>
-            </section>
-            <div class="flex">
-                <div class="border border-color-dark-blue border-solid w-64 h-8 rounded-lg">
-                    <div class="bg-yellow h-8 rounded-lg" :class='{width: `${progressBar}%` }'></div>
-                </div>
+            <div class="max-width-half mr-auto ml-auto mt-0 mb-6">
+                <!--<section class="flex items-center">-->
+                    <!--<div v-for="achievement in achievements" :key="achievement.name">-->
+                        <!--<div>-->
+                            <!--<p>{{achievement.name}}</p>-->
+                            <!--<p>{{allTrophies(achievement.action)}}</p>-->
+                            <!--<p>{{allCompletedTrophies(achievement.action)}}</p>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</section>-->
+                <div class="flex justify-center">
+                    <div class="relative border border-color-dark-blue border-solid w-64 h-4 rounded-lg">
 
+                        <div class="bg-yellow rounded-lg" :style='{width: `${progressBar}%` }' style="transition: all .3s ease-in-out; height: 14px;">
+                            <div class="absolute" style="right: 7px; top: -30px; transition: all .3s ease-in-out" :style='{left: `${progressBar - 6}%` }'>
+                                {{progressBar}}%
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-            <button @click="pushToDb">Save</button>
-            <!--<div class="flex flex-row">-->
-            <!--<p>Trophies</p>-->
-            <!--<p>{{spiderman.length}}</p>-->
-            <!--</div>-->
-            <!--<div class="flex flex-row items-center justify-start">-->
-            <!--<p class="">completed</p>-->
-            <!--<p>{{completedTrophiesId.length}}</p>-->
-            <!--</div>-->
-            <div class="flex item-center justify-center">
+
+
+
+            <div class="flex item-center justify-center mb-6">
                 <button
                         class="w-32 text-dark-blue border-solid border mr-4 ml-4 h-8 flex item-center justify-center rounded-lg border-color-dark-blue hover:bg-yellow"
                         v-for="item in filter"
@@ -35,7 +36,10 @@
                     {{item.name}}
                 </button>
             </div>
-            <div class="overflow-y-auto max-width-half mt-8 ml-auto mr-auto" style="height: 380px">
+            <button @click="pushToDb" class="bg-yellow text-dark-blue border-solid border mt-0 mr-auto ml-auto max-width-half flex justify-center rounded-lg border-color-dark-blue hover:bg-blue hover:text-white">
+                Save Trophies
+            </button>
+            <div class="overflow-y-auto max-width-half mt-2 ml-auto mr-auto" style="height: 420px">
                 <div v-for="game in filteredAchievements" :key="game.title">
                     <div class="flex flex-row items-center mt-5 mb-5 bg-brown rounded-lg">
                         <div class="trophies__trophie-icon mr-5" :class="game.type"></div>
@@ -118,8 +122,15 @@
         return this.$store.getters.dataFromDb
       },
       progressBar () {
-        return this.completedTrophiesId.length * 100 / this.spiderman.length / 2
-      }
+        return Math.round(this.completedTrophiesId.length * 100 / this.spiderman.length)
+      },
+      // checkAllCheckboxes () {
+      //   console.log(this.spiderman.filter(item => item.type).includes('platinum'))
+      //   if(this.spiderman.filter(item => item.type === 'platinum') && this.spiderman.filter(item => item.completed)) {
+      //     return this.spiderman.filter(item => item.type !== 'platinum').map(item => item.completed = true)
+      //   }
+      //
+      // },
     },
     methods: {
       trophiesFromDb () {
@@ -131,9 +142,9 @@
           })
         })
       },
-      allTrophies (type) {
-        return this.spiderman.filter(action => action.type === type).length
-      },
+      // allTrophies (type) {
+      //   return this.spiderman.filter(action => action.type === type).length
+      // },
       allCompletedTrophies (type) {
         return this.spiderman.filter(action => (action.type === type && action.completed)).length
       },

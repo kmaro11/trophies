@@ -647,7 +647,10 @@ video {
     background-color: #e6cf8b;
     transition: all .3s ease-in-out
 }
-
+.hover\:bg-blue:hover {
+    background-color: #22264b;
+    transition: all .3s ease-in-out;
+}
 .border-color-dark-blue{
     border-color: #22264b;
 }
