@@ -637,6 +637,9 @@ video {
 .text-dark-blue{
    color: #22264b;
 }
+.background-dark-blue{
+    background-color: #22264b;
+}
 .text-color-yellow{
     color: #e6cf8b;
 }
@@ -666,6 +669,9 @@ video {
 }
 .max-width-half{
     width: 50%;
+}
+.width-80{
+    width: 80%;
 }
 
 

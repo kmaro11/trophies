@@ -1,5 +1,5 @@
 <template>
-    <nav class="h-20 flex items-center pl-12 pr-12 absolute w-4/5 border-solid border-t border-b border-color-dark-blue" style="top:30px; left: 50%; transform: translateX(-50%);">
+    <nav class="h-20 flex w-full items-center pl-12 pr-12 w-4/5 background-dark-blue">
         <!--<img src="../img/logo@2x.png" alt="" class="w-full absolute" style="max-width: 200px; left: 50%; transform: translateX(-50%);">-->
         <div class="flex">
             <div v-for="item in menu" :key="item.title">
@@ -7,7 +7,7 @@
                         v-if="item.type === 'menu'"
                         router
                         :to="item.link"
-                        class="flex items-center p-4 font-bold text-dark-blue hover:text-yellow">
+                        class="flex items-center p-4 font-bold text-white hover:text-yellow">
                     {{item.name}}
                 </router-link>
             </div>
@@ -20,12 +20,12 @@
                         router
                         :to="item.link"
 
-                        class="flex items-center p-4 font-bold text-dark-blue hover:text-yellow">
+                        class="flex items-center p-4 font-bold text-white hover:text-yellow">
                     {{item.name}}
                 </router-link>
             </div>
         </div>
-        <button @click.prevent="logout()" class=" p-4 font-bold text-dark-blue hover:text-yellow">
+        <button @click.prevent="logout()" class=" p-4 font-bold text-white hover:text-yellow">
 
             Logout
         </button>

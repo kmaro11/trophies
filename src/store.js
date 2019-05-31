@@ -14,7 +14,19 @@ export default new Vuex.Store({
     userSignIn: false,
     pushStatus: Boolean,
     dbData: [],
-    userId: ''
+    userId: '',
+    games: [
+      {
+        name: 'Spiderman',
+        type: 'spiderman'
+      },
+      {
+        name: 'God Of War',
+        type: 'godofwar'
+      }
+    ],
+    selectedGame: '',
+
 
   },
   mutations: {
@@ -35,6 +47,9 @@ export default new Vuex.Store({
     },
     signInUserId (state, payload){
       state.userId = payload
+    },
+    changeGame (state, game) {
+      state.selectedGame  = game
     }
   },
   actions: {
@@ -72,22 +87,24 @@ export default new Vuex.Store({
         }
       )
     },
-    pushTrophies ({commit}, payload) {
-      db.collection('SpidermanGame').doc('Trophies').set({
-        user_id: 'blach',
-        trophies: payload
+    pushTrophies ({commit}, {trophies, game, id}) {
+      db.collection(game).doc(id).set({
+        trophies: trophies
       }).then(() => {
-        commit('submitTrophie', payload)
+        commit('submitTrophie', true)
       })
         .catch(error => console.log(error))
     },
-    getTrophies ({commit}){
-      db.collection('SpidermanGame').doc('Trophies').get()
+    getTrophies ({commit}, {game, id}){
+      db.collection(game).doc(id).get()
           .then(data => {
             let dbData = data.data().trophies
             commit('retrivedData', dbData)
 
-          })
+          }).catch(
+        error => {
+          console.log('error', error)
+        })
     }
 
   },
@@ -103,6 +120,15 @@ export default new Vuex.Store({
     },
     dataFromDb (state) {
       return state.dbData
+    },
+    allGames (state) {
+      return state.games
+    },
+    selectedGame (state) {
+      return state.selectedGame
+    },
+    userId (state) {
+      return state.userId
     },
 
   }

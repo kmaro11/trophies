@@ -1,7 +1,6 @@
 const spiderman = [
 
     {
-
         title: 'Be Greater',
         completed: false,
         subtitle: 'Collect all Trophies',
