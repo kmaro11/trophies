@@ -75,7 +75,6 @@ export default new Vuex.Store({
       })
     },
     signUserIn ({commit}, payload) {
-      console.log(commit('signInUserId', payload))
       firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
         .then(data => {
           router.push('/')
@@ -100,7 +99,6 @@ export default new Vuex.Store({
           .then(data => {
             let dbData = data.data().trophies
             commit('retrivedData', dbData)
-
           }).catch(
         error => {
           console.log('error', error)

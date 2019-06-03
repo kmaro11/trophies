@@ -1,12 +1,11 @@
 <template>
     <div class="flex h-full w-full">
         <Sidebar :progressBar="progressBar"
-                 :selectedGame="spiderman"
                  v-on:filterGame="filterTrophies($event)"
                  v-on:saveToDb="pushToDb"/>
         <div class="w-full">
             <div class="container">
-                <div v-if="selectedGame"
+                <div v-if="selectedGame.length !== 0"
                      class="overflow-y-auto max-width-half mt-2 ml-auto mr-auto width-80"
                      style="height: 420px">
                     <div v-for="game in filteredAchievements" :key="game.title"
@@ -20,7 +19,7 @@
                     </div>
                 </div>
                 <div v-else>
-                    <div v-for="game in allGame" @click="selectGame(game.type)" class="w-16">
+                    <div v-for="game in allGame" @click="selectGame(game)" :key="game.type" class="w-16">
                         <img @click="selectGame(game.type)"
                              class="w-full"
                              :src="`/trophies/game/src/img/${game.type}.jpg`"
@@ -36,7 +35,6 @@
 <script>
   import Spiderman from '@/spiderman'
   import GodOfWar from '@/godOfWar'
-  import Multiselect from 'vue-multiselect'
   import Sidebar from './Sidebar'
   import { mapGetters } from 'vuex'
 
@@ -54,11 +52,10 @@
         godofwar: GodOfWar,
         storedAchievements: [],
         filteredAchievements: [],
-
+        selectedGameArray: []
       }
     },
     components: {
-      Multiselect,
       Sidebar
     },
     computed: {
@@ -68,12 +65,13 @@
         selectedGame: 'selectedGame',
         userId: 'userId'
       }),
+
       completedTrophiesId () {
-        return (this.spiderman.filter(item => item.completed)).map(x => x.id)
+        return (this.selectedGameArray.filter(item => item.completed)).map(x => x.id)
       },
 
       progressBar () {
-        return Math.round(this.completedTrophiesId.length * 100 / this.spiderman.length)
+        return Math.round(this.completedTrophiesId.length * 100 / this.selectedGameArray.length)
       },
       // checkAllCheckboxes () {
       //   console.log(this.spiderman.filter(item => item.type).includes('platinum'))
@@ -82,10 +80,11 @@
       //   }
       //
       // },
+
     },
     methods: {
       trophiesFromDb () {
-        this.spiderman.filter(item => {
+        this.selectedGameArray.filter(item => {
           this.dataFromDb.map(dbData => {
             if (dbData === item.id) {
               item.completed = true
@@ -97,23 +96,32 @@
       filterTrophies (action) {
         this.trophiesFromDb()
         if (action === 'completed') {
-          this.filteredAchievements = this.spiderman.filter(action => action.completed)
+          this.filteredAchievements = this.selectedGameArray.filter(action => action.completed)
         } else if (action === 'remain') {
-          this.filteredAchievements = this.spiderman.filter(action => !action.completed)
+          this.filteredAchievements = this.selectedGameArray.filter(action => !action.completed)
         } else {
-          this.filteredAchievements = this.spiderman
+          this.filteredAchievements = this.selectedGameArray
         }
       },
       pushToDb () {
-        this.$store.dispatch('pushTrophies', {trophies: this.completedTrophiesId, game: this.selectedGame, id: this.userId})
+        this.$store.dispatch('pushTrophies', {trophies: this.completedTrophiesId, game: this.selectedGame.type, id: this.userId})
       },
       getFromDb () {
-        this.$store.dispatch('getTrophies', {game:this.selectedGame, id: this.userId})
+        this.$store.dispatch('getTrophies', {game:this.selectedGame.type, id: this.userId})
+        this.trophiesFromDb()
       },
       selectGame (game) {
-        this.$store.commit('changeGame', game)
+
+        this.$store.commit('changeGame', game.type)
         this.getFromDb()
-        this.trophiesFromDb()
+        this.changeSelectedGameTrophies(game.type)
+
+      },
+      changeSelectedGameTrophies (game) {
+        // let newGame = this.selectedGame
+        // console.log(newGame)
+        // console.log(this[newGame])
+        this.selectedGameArray = this[game]
       },
     },
     created () {
