@@ -33,102 +33,108 @@
     </div>
 </template>
 <script>
-  import Spiderman from '@/spiderman'
-  import GodOfWar from '@/godOfWar'
-  import Sidebar from './Sidebar'
-  import { mapGetters } from 'vuex'
+    import Spiderman from '@/spiderman'
+    import GodOfWar from '@/godOfWar'
+    import Sidebar from './Sidebar'
+    import {mapGetters} from 'vuex'
 
-  export default {
-    data () {
-      return {
-        menu: [
-          {
-            name: 'Spiderman',
-            action: 'spiderman',
-            logo: 'spiderman.jpeg',
-          }
-        ],
-        spiderman: Spiderman,
-        godofwar: GodOfWar,
-        storedAchievements: [],
-        filteredAchievements: [],
-        selectedGameArray: []
-      }
-    },
-    components: {
-      Sidebar
-    },
-    computed: {
-      ...mapGetters({
-        dataFromDb: 'dataFromDb',
-        allGame: 'allGames',
-        selectedGame: 'selectedGame',
-        userId: 'userId'
-      }),
-
-      completedTrophiesId () {
-        return (this.selectedGameArray.filter(item => item.completed)).map(x => x.id)
-      },
-
-      progressBar () {
-        return Math.round(this.completedTrophiesId.length * 100 / this.selectedGameArray.length)
-      },
-      // checkAllCheckboxes () {
-      //   console.log(this.spiderman.filter(item => item.type).includes('platinum'))
-      //   if(this.spiderman.filter(item => item.type === 'platinum') && this.spiderman.filter(item => item.completed)) {
-      //     return this.spiderman.filter(item => item.type !== 'platinum').map(item => item.completed = true)
-      //   }
-      //
-      // },
-
-    },
-    methods: {
-      trophiesFromDb () {
-        this.selectedGameArray.filter(item => {
-          this.dataFromDb.map(dbData => {
-            if (dbData === item.id) {
-              item.completed = true
+    export default {
+        data() {
+            return {
+                menu: [
+                    {
+                        name: 'Spiderman',
+                        action: 'spiderman',
+                        logo: 'spiderman.jpeg',
+                    }
+                ],
+                spiderman: Spiderman,
+                godofwar: GodOfWar,
+                storedAchievements: [],
+                filteredAchievements: [],
+                selectedGameArray: []
             }
-          })
-        })
-      },
+        },
+        components: {
+            Sidebar
+        },
+        computed: {
+            ...mapGetters({
+                dataFromDb: 'dataFromDb',
+                allGame: 'allGames',
+                selectedGame: 'selectedGame',
+                userId: 'userId'
+            }),
 
-      filterTrophies (action) {
-        this.trophiesFromDb()
-        if (action === 'completed') {
-          this.filteredAchievements = this.selectedGameArray.filter(action => action.completed)
-        } else if (action === 'remain') {
-          this.filteredAchievements = this.selectedGameArray.filter(action => !action.completed)
-        } else {
-          this.filteredAchievements = this.selectedGameArray
+            completedTrophiesId() {
+                return (this.selectedGameArray.filter(item => item.completed)).map(x => x.id)
+            },
+
+            progressBar() {
+                return Math.round(this.completedTrophiesId.length * 100 / this.selectedGameArray.length)
+            },
+            // checkAllCheckboxes () {
+            //   console.log(this.spiderman.filter(item => item.type).includes('platinum'))
+            //   if(this.spiderman.filter(item => item.type === 'platinum') && this.spiderman.filter(item => item.completed)) {
+            //     return this.spiderman.filter(item => item.type !== 'platinum').map(item => item.completed = true)
+            //   }
+            //
+            // },
+
+
+        },
+        methods: {
+            trophiesFromDb() {
+                this.selectedGameArray.filter(item => {
+                    this.dataFromDb.map(dbData => {
+                        if (dbData === item.id) {
+                            item.completed = true
+                        }
+                    })
+                })
+            },
+
+            filterTrophies(action) {
+                this.trophiesFromDb()
+                if (action === 'completed') {
+                    this.filteredAchievements = this.selectedGameArray.filter(action => action.completed)
+                } else if (action === 'remain') {
+                    this.filteredAchievements = this.selectedGameArray.filter(action => !action.completed)
+                } else {
+                    this.filteredAchievements = this.selectedGameArray
+                }
+            },
+            pushToDb() {
+                this.$store.dispatch('pushTrophies', {
+                    trophies: this.completedTrophiesId,
+                    game: this.selectedGame,
+                    id: this.userId
+                })
+            },
+            getFromDb() {
+                this.$store.dispatch('getTrophies', {game: this.selectedGame, id: this.userId})
+                this.trophiesFromDb()
+            },
+            selectGame(game) {
+                this.$store.commit('changeGame', game.type)
+                this.changeSelectedGameTrophies
+                this.getFromDb()
+
+            },
+            changeSelectedGameTrophies() {
+                if (this.selectedGame === 'spiderman') {
+                    return this.selectedGameArray = this.spiderman
+                } else if (this.selectedGame === 'godofwar') {
+                    return this.selectedGameArray = this.godofwar
+                }
+            },
+
+        },
+        created() {
+            this.filterTrophies('all')
+
         }
-      },
-      pushToDb () {
-        this.$store.dispatch('pushTrophies', {trophies: this.completedTrophiesId, game: this.selectedGame.type, id: this.userId})
-      },
-      getFromDb () {
-        this.$store.dispatch('getTrophies', {game:this.selectedGame.type, id: this.userId})
-        this.trophiesFromDb()
-      },
-      selectGame (game) {
-
-        this.$store.commit('changeGame', game.type)
-        this.getFromDb()
-        this.changeSelectedGameTrophies(game.type)
-
-      },
-      changeSelectedGameTrophies (game) {
-        // let newGame = this.selectedGame
-        // console.log(newGame)
-        // console.log(this[newGame])
-        this.selectedGameArray = this[game]
-      },
-    },
-    created () {
-      this.filterTrophies('all')
-
     }
-  }
 
 </script>
 <style scoped lang="scss">
