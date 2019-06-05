@@ -25,7 +25,7 @@ export default new Vuex.Store({
         type: 'godofwar'
       }
     ],
-    selectedGame: '',
+    selectedGame: [],
 
 
   },
@@ -102,6 +102,15 @@ export default new Vuex.Store({
           }).catch(
         error => {
           console.log('error', error)
+        })
+    },
+    getAllTrophies ({commit}, {game}) {
+      db.collection(game).get()
+        .then(data => {
+          data.forEach( item => {
+            console.log(item.data())
+
+          })
         })
     }
 

@@ -1,7 +1,7 @@
 <template>
     <div id="app" class="h-full bg-site">
         <Navigation/>
-        <router-view></router-view>
+        <router-view style="height: calc(100vh - 80px);"></router-view>
     </div>
 </template>
 <script>
