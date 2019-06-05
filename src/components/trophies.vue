@@ -118,7 +118,6 @@
         this.trophiesFromDb()
       },
       selectGame (game) {
-        console.log(game)
         this.$store.commit('changeGame', game)
         this.changeSelectedGameTrophies()
         this.getFromDb()
