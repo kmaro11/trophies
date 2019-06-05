@@ -7,8 +7,6 @@
             </div>
             <div v-else>
                 <h1>You just Sign in</h1>
-                <button @click.prevent="pushToDb">push</button>
-                <button @click.prevent="getFromDb">get</button>
             </div>
         </div>
     </div>
@@ -41,10 +39,7 @@
             }
         },
         methods: {
-            getFromDb() {
-                this.$store.dispatch('getTrophies')
 
-            }
         }
 
     }

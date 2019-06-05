@@ -27,6 +27,8 @@
         methods: {
             onSignin () {
                 this.$store.dispatch('signUserIn', {email: this.email, password: this.password})
+                this.$store.dispatch('getUsernames',)
+
             }
         }
     }

@@ -1,6 +1,11 @@
 <template>
     <div class="w-64 h-full p-4">
         <h2 class="mb-8 text-center">Options</h2>
+        <div class="mb-8">
+            <span> Your Username:</span>
+            <input type="text" v-model="username" placeholder="Set username">
+            <button @click="setUsername">-></button>
+        </div>
         <div class="flex justify-center">
             <div class="relative border border-color-dark-blue border-solid w-64 h-4 rounded-lg">
                 <div class="bg-yellow rounded-lg"
@@ -47,96 +52,104 @@
     </div>
 </template>
 <script>
-  import { mapGetters } from 'vuex'
-  import Multiselect from 'vue-multiselect'
+    import {mapGetters} from 'vuex'
+    import Multiselect from 'vue-multiselect'
 
-  export default {
-    data () {
-      return {
-        openMultiselect: false,
-        filter: [
-          {
-            name: 'All',
-            action: 'all'
-          },
-          {
-            name: 'Completed',
-            action: 'completed'
-          },
-          {
-            name: 'Remain',
-            action: 'remain'
-          }
-        ],
-        achievements: [
-          {
-            name: 'platinum',
-            action: 'platinum'
-          },
-          {
-            name: 'gold',
-            action: 'gold'
-          },
-          {
-            name: 'silver',
-            action: 'silver'
-          },
-          {
-            name: 'bronze',
-            action: 'bronze'
-          }
-        ],
-        // selectedGame: []
-      }
-    },
-    props: {
-      progressBar: Number,
-      gameAchievements: Array
-    },
-    components: {
-      Multiselect,
-    },
-    computed: {
-      ...mapGetters({
-        allGame: 'allGames',
-        selectedGame: 'selectedGame',
-      }),
-    },
-    methods: {
-
-      trophiesFromDb () {
-        this.spiderman.filter(item => {
-          this.dataFromDb.map(dbData => {
-            if (dbData === item.id) {
-              item.completed = true
+    export default {
+        data() {
+            return {
+                username: '',
+                openMultiselect: false,
+                filter: [
+                    {
+                        name: 'All',
+                        action: 'all'
+                    },
+                    {
+                        name: 'Completed',
+                        action: 'completed'
+                    },
+                    {
+                        name: 'Remain',
+                        action: 'remain'
+                    }
+                ],
+                achievements: [
+                    {
+                        name: 'platinum',
+                        action: 'platinum'
+                    },
+                    {
+                        name: 'gold',
+                        action: 'gold'
+                    },
+                    {
+                        name: 'silver',
+                        action: 'silver'
+                    },
+                    {
+                        name: 'bronze',
+                        action: 'bronze'
+                    }
+                ],
+                // selectedGame: []
             }
-          })
-        })
-      },
-      getFromDb () {
-        this.$store.dispatch('getTrophies', {game: this.selectedGame.type, id: this.userId})
-        this.trophiesFromDb()
-      },
-      filterTrophies (item) {
-        this.$emit('filterGame', item)
-      },
-      pushToDb () {
-        this.$emit('saveToDb')
-      },
-      selectGame (game) {
-        this.$emit('changeGameName', game)
-      },
+        },
+        props: {
+            progressBar: Number,
+            gameAchievements: Array
+        },
+        components: {
+            Multiselect,
+        },
+        computed: {
+            ...mapGetters({
+                allGame: 'allGames',
+                selectedGame: 'selectedGame',
+                userId: 'userId'
+            }),
+        },
+        methods: {
 
-      // allTrophies (type) {
-      //   return this.selectedGame.filter(action => action.type === type).length
-      // },
-      // allCompletedTrophies (type) {
-      //   return this.selectedGame.filter(action => (action.type === type && action.completed)).length
-      // },
-    },
-    created () {
-      // this.allCompletedTrophies()
+            trophiesFromDb() {
+                this.spiderman.filter(item => {
+                    this.dataFromDb.map(dbData => {
+                        if (dbData === item.id) {
+                            item.completed = true
+                        }
+                    })
+                })
+            },
+            getFromDb() {
+                this.$store.dispatch('getTrophies', {game: this.selectedGame.type, id: this.userId})
+                this.trophiesFromDb()
+            },
+            filterTrophies(item) {
+                this.$emit('filterGame', item)
+            },
+            pushToDb() {
+                this.$emit('saveToDb')
+            },
+            selectGame(game) {
+                this.$emit('changeGameName', game)
+            },
+            setUsername() {
+                this.$store.dispatch('createUserName', {
+                    userName: this.username,
+                    id: this.userId
+                })
+            }
+
+            // allTrophies (type) {
+            //   return this.selectedGame.filter(action => action.type === type).length
+            // },
+            // allCompletedTrophies (type) {
+            //   return this.selectedGame.filter(action => (action.type === type && action.completed)).length
+            // },
+        },
+        created() {
+            // this.allCompletedTrophies()
+        }
     }
-  }
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
