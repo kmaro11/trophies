@@ -3,7 +3,7 @@
         <h2 class="mb-8 text-center">Options</h2>
         <div class="mb-8">
             <span> Your Username:</span>
-            <input type="text" v-model="username" placeholder="Set username">
+            <input type="text" v-model="changeUsername" class="bg-site" placeholder="Set username">
             <button @click="setUsername">-></button>
         </div>
         <div class="flex justify-center">
@@ -52,104 +52,118 @@
     </div>
 </template>
 <script>
-    import {mapGetters} from 'vuex'
-    import Multiselect from 'vue-multiselect'
+  import { mapGetters } from 'vuex'
+  import Multiselect from 'vue-multiselect'
 
-    export default {
-        data() {
-            return {
-                username: '',
-                openMultiselect: false,
-                filter: [
-                    {
-                        name: 'All',
-                        action: 'all'
-                    },
-                    {
-                        name: 'Completed',
-                        action: 'completed'
-                    },
-                    {
-                        name: 'Remain',
-                        action: 'remain'
-                    }
-                ],
-                achievements: [
-                    {
-                        name: 'platinum',
-                        action: 'platinum'
-                    },
-                    {
-                        name: 'gold',
-                        action: 'gold'
-                    },
-                    {
-                        name: 'silver',
-                        action: 'silver'
-                    },
-                    {
-                        name: 'bronze',
-                        action: 'bronze'
-                    }
-                ],
-                // selectedGame: []
+  export default {
+    data () {
+      return {
+        userName: '',
+        openMultiselect: false,
+        filter: [
+          {
+            name: 'All',
+            action: 'all'
+          },
+          {
+            name: 'Completed',
+            action: 'completed'
+          },
+          {
+            name: 'Remain',
+            action: 'remain'
+          }
+        ],
+        achievements: [
+          {
+            name: 'platinum',
+            action: 'platinum'
+          },
+          {
+            name: 'gold',
+            action: 'gold'
+          },
+          {
+            name: 'silver',
+            action: 'silver'
+          },
+          {
+            name: 'bronze',
+            action: 'bronze'
+          }
+        ],
+        // selectedGame: []
+      }
+    },
+    props: {
+      progressBar: Number,
+      gameAchievements: Array
+    },
+    components: {
+      Multiselect,
+    },
+    computed: {
+      ...mapGetters({
+        allGame: 'allGames',
+        selectedGame: 'selectedGame',
+        userId: 'userId',
+        userNameFromDb: 'getAllUserNames'
+      }),
+      changeUsername: {
+        get() {
+          return this.$store.state.userName
+        },
+        set(value) {
+          console.log(value)
+          this.$store.commit('changeUsername', value);
+        },
+      }
+    },
+    methods: {
+
+      trophiesFromDb () {
+        this.spiderman.filter(item => {
+          this.dataFromDb.map(dbData => {
+            if (dbData === item.id) {
+              item.completed = true
             }
-        },
-        props: {
-            progressBar: Number,
-            gameAchievements: Array
-        },
-        components: {
-            Multiselect,
-        },
-        computed: {
-            ...mapGetters({
-                allGame: 'allGames',
-                selectedGame: 'selectedGame',
-                userId: 'userId'
-            }),
-        },
-        methods: {
-
-            trophiesFromDb() {
-                this.spiderman.filter(item => {
-                    this.dataFromDb.map(dbData => {
-                        if (dbData === item.id) {
-                            item.completed = true
-                        }
-                    })
-                })
-            },
-            getFromDb() {
-                this.$store.dispatch('getTrophies', {game: this.selectedGame.type, id: this.userId})
-                this.trophiesFromDb()
-            },
-            filterTrophies(item) {
-                this.$emit('filterGame', item)
-            },
-            pushToDb() {
-                this.$emit('saveToDb')
-            },
-            selectGame(game) {
-                this.$emit('changeGameName', game)
-            },
-            setUsername() {
-                this.$store.dispatch('createUserName', {
-                    userName: this.username,
-                    id: this.userId
-                })
-            }
-
-            // allTrophies (type) {
-            //   return this.selectedGame.filter(action => action.type === type).length
-            // },
-            // allCompletedTrophies (type) {
-            //   return this.selectedGame.filter(action => (action.type === type && action.completed)).length
-            // },
-        },
-        created() {
-            // this.allCompletedTrophies()
-        }
+          })
+        })
+      },
+      getFromDb () {
+        this.$store.dispatch('getTrophies', {game: this.selectedGame.type, id: this.userId})
+        this.trophiesFromDb()
+      },
+      filterTrophies (item) {
+        this.$emit('filterGame', item)
+      },
+      pushToDb () {
+        this.$emit('saveToDb')
+      },
+      selectGame (game) {
+        this.$emit('changeGameName', game)
+      },
+      setUsername () {
+        console.log('sidebar', this.changeUsername)
+        this.$store.dispatch('createUserName', {
+          userName: this.changeUsername,
+          id: this.userId
+        })
+      },
+      // allTrophies (type) {
+      //   return this.selectedGame.filter(action => action.type === type).length
+      // },
+      // allCompletedTrophies (type) {
+      //   return this.selectedGame.filter(action => (action.type === type && action.completed)).length
+      // },
+      getUser () {
+        this.$store.dispatch('getUsernames', this.userId)
+      }
+    },
+    created () {
+      this.getUser()
+      // this.allCompletedTrophies()
     }
+  }
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

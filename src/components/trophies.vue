@@ -1,9 +1,6 @@
 <template>
     <div class="flex h-full w-full">
-        <Sidebar :progressBar="progressBar"
-                 v-on:filterGame="filterTrophies($event)"
-                 v-on:changeGameName="selectGame($event)"
-                 v-on:saveToDb="pushToDb"/>
+
         <div class="w-full">
             <div class="container">
                 <div v-if="selectedGame.length !== 0"
@@ -32,6 +29,10 @@
             </div>
             <button @click="getAllData">getAll</button>
         </div>
+        <Sidebar :progressBar="progressBar"
+                 v-on:filterGame="filterTrophies($event)"
+                 v-on:changeGameName="selectGame($event)"
+                 v-on:saveToDb="pushToDb"/>
     </div>
 </template>
 <script>
