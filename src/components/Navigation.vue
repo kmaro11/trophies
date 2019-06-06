@@ -1,78 +1,89 @@
 <template>
-    <nav class="h-20 flex w-full items-center pl-12 pr-12 w-4/5 background-dark-blue">
-        <div class="flex justify-end">
-            <div v-for="item in menu" :key="item.title">
-                <router-link
-                        v-if="disableBtn"
-                        router
-                        :to="item.link"
-                        class="flex items-center p-4 font-bold text-white hover:text-yellow">
-                    {{item.name}}
-                </router-link>
-            </div>
-
+    <nav class="h-20 flex justify-end w-full items-center pl-12 pr-12 w-4/5 background-dark-blue">
+        <div class="flex">
+            <router-link router to="/"
+                         class="flex items-center p-4 font-bold text-white hover:text-yellow">
+                Home
+            </router-link>
+            <router-link router to="/trophies"
+                         v-if="userSignIn"
+                         class="flex items-center p-4 font-bold text-white hover:text-yellow">
+                Trophies
+            </router-link>
+            <router-link router to="/sign-up"
+                         v-if="!userSignIn"
+                         class="flex items-center p-4 font-bold text-white hover:text-yellow">
+                Sign up
+            </router-link>
+            <router-link router to="/sign-in"
+                         v-if="!userSignIn"
+                         class="flex items-center p-4 font-bold text-white hover:text-yellow">
+                Sign in
+            </router-link>
         </div>
-        <button @click.prevent="logout()" class=" p-4 font-bold text-white hover:text-yellow">
+        <button @click.prevent="logout()" v-if="userSignIn" class=" p-4 font-bold text-white hover:text-yellow">
 
             Logout
         </button>
     </nav>
 </template>
 <script>
-  import { mapGetters } from 'vuex'
-  export default {
-    data () {
-      return {
-        menu: [
-          {
-            name: 'Home',
-            link: '/',
-            type: 'menu'
-          },
-          {
-            name: 'Trophies',
-            link: '/trophies',
-            type: 'menu'
-          },
-          {
-            name: 'Sign up',
-            link: 'sign-up/',
-            type: 'login'
-          },
-          {
-            name: 'Sign in',
-            link: '/sign-in',
-            type: 'login'
-          },
+    import {mapGetters} from 'vuex'
 
-        ],
-        status: false
-      }
+    export default {
+        data() {
+            return {
+                // menu: [
+                //     {
+                //         name: 'Home',
+                //         link: '',
+                //         type: 'menu',
+                //         show: true
+                //     },
+                //     {
+                //         name: 'Trophies',
+                //         link: '/trophies',
+                //         type: 'trophies',
+                //         show: true
+                //     },
+                //     {
+                //         name: 'Sign up',
+                //         link: 'sign-up/',
+                //         type: 'login',
+                //         show: true
+                //     },
+                //     {
+                //         name: 'Sign in',
+                //         link: '/sign-in',
+                //         type: 'login',
+                //         show: true
+                //     },
+                //
+                // ],
+                status: false,
+            }
 
-    },
-    computed: {
-      ...mapGetters({
-       loginStatus: 'user'
-      }),
+        },
+        computed: {
+            ...mapGetters({
+                // loginStatus: 'user',
+                userSignIn: 'signInStatus'
+            }),
 
-      statusLogout () {
-        return this.$store.getters.logoutStatus
-      },
-      menuList () {
-
-      }
-    },
-    watch: {
-      statusLogout (value) {
-        this.status = value
-      }
-    },
-    methods: {
-      logout () {
-        this.$store.dispatch('logout', false)
-      }
+            // statusLogout() {
+            //     return this.$store.getters.logoutStatus
+            // },
+            // disableBtn() {
+            //     return this.$store.getters.signInStatus
+            //     // return this.userSignIn ? this.menu.filter(item => (item.type === 'login' && item.type === 'login').map(menu => menu.show = false) : this.menu.filter(item => item.type === 'trophies').map(menu => menu.show = false))
+            // }
+        },
+        methods: {
+            logout() {
+                this.$store.dispatch('logout', false)
+            }
+        }
     }
-  }
 </script>
 
 <!--position: absolute;-->
