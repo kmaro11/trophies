@@ -1,5 +1,5 @@
 <template>
-    <nav class="h-20 flex justify-end w-full items-center pl-12 pr-12 w-4/5 background-dark-blue fixed">
+    <nav class="h-20 flex justify-end w-full items-center pl-12 pr-12 w-4/5 background-dark-blue fixed z-50">
         <div class="flex">
             <router-link router to="/"
                          class="flex items-center p-4 font-bold text-white hover:text-yellow">
