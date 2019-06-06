@@ -635,35 +635,50 @@ video {
 /*diy*/
 
 .text-dark-blue{
-   color: #22264b;
+   color: #37003c;
 }
 .background-dark-blue{
-    background-color: #22264b;
+    background-color: #37003c;
 }
-.text-color-yellow{
-    color: #e6cf8b;
+.text-pink{
+    color: #ff2882;
 }
-.hover\:text-yellow:hover {
-    color: #e6cf8b;
+.hover\:text-dark-blue:hover {
+    color: #37003c;
 }
 .hover\:bg-yellow:hover {
     background-color: #e6cf8b;
     transition: all .3s ease-in-out
 }
 .hover\:bg-blue:hover {
-    background-color: #22264b;
+    background-color: #37003c;
     transition: all .3s ease-in-out;
 }
+.hover\:bg-pink:hover {
+    background-color: #ff2882;
+    transition: all .3s ease-in-out;
+}
+.bg-opacity{
+    background-color: rgba(0, 0, 0, .25);
+}
+
 .border-color-dark-blue{
-    border-color: #22264b;
+    border-color: #02894e;
 }
 
 .bg-site{
    background-color: #e8edf3;
 }
-.bg-brown{
-    background-color: #b56969;
+.bg-pink{
+    background-color: #ff2882;
 }
+.bg-green{
+    background-color: #02894e;
+}
+.bg-light-green{
+    background-color: #00ff87;
+}
+
 .bg-yellow{
     background-color: #e6cf8b;
 }

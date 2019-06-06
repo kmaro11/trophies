@@ -1,6 +1,5 @@
 <template>
-    <div class="flex h-full w-full">
-
+    <div class="flex h-full w-full" v-if="userSignIn">
         <div class="w-full">
             <div class="container">
                 <div v-if="selectedGame.length !== 0"
@@ -27,12 +26,14 @@
                     </div>
                 </div>
             </div>
-            <button @click="getAllData">getAll</button>
+
         </div>
+        <transition name="slide-fade">
         <Sidebar :progressBar="progressBar"
                  v-on:filterGame="filterTrophies($event)"
                  v-on:changeGameName="selectGame($event)"
-                 v-on:saveToDb="pushToDb"/>
+                 v-on:saveToDb="pushToDb" />
+        </transition>
     </div>
 </template>
 <script>
@@ -55,7 +56,7 @@
         godofwar: GodOfWar,
         storedAchievements: [],
         filteredAchievements: [],
-        selectedGameArray: []
+        selectedGameArray: [],
       }
     },
     components: {
@@ -66,7 +67,8 @@
         dataFromDb: 'dataFromDb',
         allGame: 'allGames',
         selectedGame: 'selectedGame',
-        userId: 'userId'
+        userId: 'userId',
+          userSignIn: 'signInStatus'
       }),
 
       completedTrophiesId () {
@@ -168,4 +170,16 @@
             }
         }
     }
+    .slide-fade-enter-active {
+        transition: all .5s ease;
+    }
+    .slide-fade-leave-active {
+        transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    }
+    .slide-fade-enter, .slide-fade-leave-to
+        /* .slide-fade-leave-active below version 2.1.8 */ {
+        transform: translateX(50px);
+        opacity: 0;
+    }
+
 </style>

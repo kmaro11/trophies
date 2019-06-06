@@ -1,5 +1,5 @@
 <template>
-    <nav class="h-20 flex justify-end w-full items-center pl-12 pr-12 w-4/5 background-dark-blue">
+    <nav class="h-20 flex justify-end w-full items-center pl-12 pr-12 w-4/5 background-dark-blue fixed">
         <div class="flex">
             <router-link router to="/"
                          class="flex items-center p-4 font-bold text-white hover:text-yellow">
@@ -66,17 +66,8 @@
         },
         computed: {
             ...mapGetters({
-                // loginStatus: 'user',
                 userSignIn: 'signInStatus'
             }),
-
-            // statusLogout() {
-            //     return this.$store.getters.logoutStatus
-            // },
-            // disableBtn() {
-            //     return this.$store.getters.signInStatus
-            //     // return this.userSignIn ? this.menu.filter(item => (item.type === 'login' && item.type === 'login').map(menu => menu.show = false) : this.menu.filter(item => item.type === 'trophies').map(menu => menu.show = false))
-            // }
         },
         methods: {
             logout() {
@@ -85,9 +76,3 @@
         }
     }
 </script>
-
-<!--position: absolute;-->
-<!--width: 80%;-->
-<!--top: 90px;-->
-<!--left: 50%;-->
-<!--transform: translateX(-50%);-->
