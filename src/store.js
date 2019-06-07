@@ -28,7 +28,8 @@ export default new Vuex.Store({
     selectedGame: [],
     createdName: false,
     usernamesFromDb: [],
-    userName: ''
+    userName: '',
+    filteredOption: 'all'
   },
   mutations: {
     setUser (state, payload) {
@@ -67,7 +68,11 @@ export default new Vuex.Store({
     changeUsername (state, payload) {
       console.log(payload)
       state.userName = payload
-    }
+    },
+    filterGame (state, option){
+      console.log(option)
+      state.filteredOption = option
+    },
   },
   actions: {
     signUserUp ({commit}, payload) {
@@ -177,6 +182,9 @@ export default new Vuex.Store({
     },
     getAllUserNames (state) {
       return state.userName
+    },
+    filterOption (state){
+      return state.filteredOption
     }
 
   }

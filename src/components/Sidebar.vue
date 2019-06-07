@@ -140,7 +140,8 @@
                 this.trophiesFromDb()
             },
             filterTrophies(item) {
-                this.$emit('filterGame', item)
+              this.$store.commit('filterGame', item)
+                // this.$emit('filterGame', item)
             },
             pushToDb() {
                 this.$emit('saveToDb')

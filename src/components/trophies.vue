@@ -1,38 +1,34 @@
 <template>
-    <div class="flex h-full w-full" v-if="userSignIn">
-        <div class="w-full">
-            <div class="container">
-                <div v-if="selectedGame.length !== 0"
-                     class="overflow-y-auto max-width-half mt-2 ml-auto mr-auto width-80"
-                     style="height: 420px">
-                    <div v-for="game in filteredAchievements" :key="game.title"
-                         class="flex flex-row items-center mt-5 mb-5 bg-brown rounded-lg">
-                        <div class="trophies__trophie-icon mr-5" :class="game.type"></div>
-                        <div class="flex flex-col mr-5">
-                            <div class="text-white"> {{game.title}}</div>
-                            <div class="text-white">{{game.subtitle}}</div>
-                        </div>
-                        <input type='checkbox' v-model="game.completed">
+    <div class="flex h-full w-full justify-between" v-if="userSignIn">
+        <div class="w-full h-full max-w-4xl mr-auto ml-auto mt-6">
+            <div v-if="selectedGame.length !== 0"
+                 class="overflow-y-auto max-width-half mt-2 ml-auto mr-auto width-80"
+                 style="height: 420px">
+                <div v-for="game in filterTrophies" :key="game.title"
+                     class="flex flex-row items-center mt-5 mb-5 bg-brown rounded-lg">
+                    <div class="trophies__trophie-icon mr-5" :class="game.type"></div>
+                    <div class="flex flex-col mr-5">
+                        <div class="text-white"> {{game.title}}</div>
+                        <div class="text-white">{{game.subtitle}}</div>
                     </div>
-                </div>
-                <div v-else>
-                    <div v-for="game in allGame" @click="selectGame(game)" :key="game.type" class="w-16">
-                        <img @click="selectGame(game.type)"
-                             class="w-full"
-                             :src="`/trophies/game/src/img/${game.type}.jpg`"
-                             alt="">
-
-                        {{game.name}}
-                    </div>
+                    <input type='checkbox' v-model="game.completed">
                 </div>
             </div>
+            <div v-else class="flex items-start justify-center">
+                <div v-for="game in allGame"
+                     @click="selectGame(game)"
+                     :key="game.type"
+                     class="w-16 trophies__background-img m-2 text-white text-3xl flex justify-center items-center cursor-pointer"
+                     :class="game.type">
+                    <div>{{game.name}}</div>
 
+                </div>
+            </div>
         </div>
         <transition name="slide-fade">
-        <Sidebar :progressBar="progressBar"
-                 v-on:filterGame="filterTrophies($event)"
-                 v-on:changeGameName="selectGame($event)"
-                 v-on:saveToDb="pushToDb" />
+            <Sidebar :progressBar="progressBar"
+                     v-on:changeGameName="selectGame"
+                     v-on:saveToDb="pushToDb"/>
         </transition>
     </div>
 </template>
@@ -68,7 +64,8 @@
         allGame: 'allGames',
         selectedGame: 'selectedGame',
         userId: 'userId',
-          userSignIn: 'signInStatus'
+        userSignIn: 'signInStatus',
+        filterOption: 'filterOption'
       }),
 
       completedTrophiesId () {
@@ -85,30 +82,24 @@
       //   }
       //
       // },
-
+      filterTrophies () {
+        // this.trophiesFromDb()
+        this.selectedGameArray.forEach(item => {
+          if (this.dataFromDb.includes(item.id)) {
+            item.completed = true
+          }
+        })
+        if (this.filterOption === 'completed') {
+          return this.selectedGameArray.filter(action => action.completed)
+        } else if (this.filterOption === 'remain') {
+          return this.selectedGameArray.filter(action => !action.completed)
+        } else {
+          return this.selectedGameArray
+        }
+      },
     },
 
     methods: {
-      trophiesFromDb () {
-        this.selectedGameArray.filter(item => {
-          this.dataFromDb.map(dbData => {
-            if (dbData === item.id) {
-              item.completed = true
-            }
-          })
-        })
-      },
-
-      filterTrophies (action) {
-        this.trophiesFromDb()
-        if (action === 'completed') {
-          this.filteredAchievements = this.selectedGameArray.filter(action => action.completed)
-        } else if (action === 'remain') {
-          this.filteredAchievements = this.selectedGameArray.filter(action => !action.completed)
-        } else {
-          this.filteredAchievements = this.selectedGameArray
-        }
-      },
       pushToDb () {
         this.$store.dispatch('pushTrophies', {
           trophies: this.completedTrophiesId,
@@ -118,30 +109,21 @@
       },
       getFromDb () {
         this.$store.dispatch('getTrophies', {game: this.selectedGame.type, id: this.userId})
-        this.trophiesFromDb()
       },
       selectGame (game) {
         this.$store.commit('changeGame', game)
-        this.changeSelectedGameTrophies()
+        this.changeSelectedGameTrophies(game)
         this.getFromDb()
 
       },
-      changeSelectedGameTrophies () {
-        if (this.selectedGame.type === 'spiderman') {
-          return this.selectedGameArray = this.spiderman
-        } else if (this.selectedGame.type === 'godofwar') {
-          return this.selectedGameArray = this.godofwar
-        }
+      changeSelectedGameTrophies (game) {
+        this.selectedGameArray = [...this[game.type]]
       },
       getAllData () {
         this.$store.dispatch('getAllTrophies', {game: this.selectedGame.type})
       }
 
     },
-    created () {
-      this.filterTrophies('all')
-
-    }
   }
 
 </script>
@@ -170,16 +152,53 @@
             }
         }
     }
+
     .slide-fade-enter-active {
         transition: all .5s ease;
     }
+
     .slide-fade-leave-active {
         transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
     }
+
     .slide-fade-enter, .slide-fade-leave-to
-        /* .slide-fade-leave-active below version 2.1.8 */ {
+        /* .slide-fade-leave-active below version 2.1.8 */
+    {
         transform: translateX(50px);
         opacity: 0;
+    }
+
+    .trophies__background-img {
+        max-width: 250px;
+        height: 250px;
+        width: 100%;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+
+        &.playstation {
+            background-image: url("../img/console@2x.png");
+        }
+
+        &.spiderman {
+            background-image: url("../img/spiderman.jpg");
+        }
+
+        &.godofwar {
+            background-image: url("../img/godofwar.jpg");
+        }
+
+        &.uncharted-colection {
+            background-image: url("../img/uncharted-colection.jpg");
+        }
+
+        &.uncharted-4 {
+            background-image: url("../img/uncharted-4.jpg");
+        }
+
+        &.uncharted-5 {
+            background-image: url("../img/uncharted-5.jpg");
+        }
     }
 
 </style>
