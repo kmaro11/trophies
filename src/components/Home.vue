@@ -11,28 +11,28 @@
             </div>
             <div class="trophies__background-img spiderman h-full ">
                 <!--<div class="bg-opacity absolute inset-0 flex justify-center items-center">-->
-                    <!--&lt;!&ndash;<h1 class="text-white text-6xl font-bold">Only Playstation Game</h1>&ndash;&gt;-->
+                <!--&lt;!&ndash;<h1 class="text-white text-6xl font-bold">Only Playstation Game</h1>&ndash;&gt;-->
                 <!--</div>-->
 
             </div>
             <div class="trophies__background-img godofwar h-full ">
                 <!--<div class="bg-opacity absolute inset-0 flex justify-center items-center">-->
-                    <!--<h2 class="text-white text-6xl font-bold"></h2>-->
+                <!--<h2 class="text-white text-6xl font-bold"></h2>-->
                 <!--</div>-->
             </div>
             <div class="trophies__background-img uncharted-colection h-full ">
                 <!--<div class="bg-opacity absolute inset-0 flex justify-center items-center">-->
-                    <!--<h2 class="text-white text-6xl font-bold"></h2>-->
+                <!--<h2 class="text-white text-6xl font-bold"></h2>-->
                 <!--</div>-->
             </div>
             <div class="trophies__background-img uncharted-4 h-full ">
                 <!--<div class="bg-opacity absolute inset-0 flex justify-center items-center">-->
-                    <!--<h2 class="text-white text-6xl font-bold"></h2>-->
+                <!--<h2 class="text-white text-6xl font-bold"></h2>-->
                 <!--</div>-->
             </div>
             <div class="trophies__background-img uncharted-5 h-full ">
                 <!--<div class="bg-opacity absolute inset-0 flex justify-center items-center">-->
-                    <!--<h2 class="text-white text-6xl font-bold"></h2>-->
+                <!--<h2 class="text-white text-6xl font-bold"></h2>-->
                 <!--</div>-->
             </div>
             <!--<div v-if="!userLoginStatus">-->
@@ -71,7 +71,14 @@
                 return this.$store.getters.signInStatus
             }
         },
-        methods: {}
+        methods: {
+            getAllUsers() {
+                this.$store.dispatch('getAllTrophies',)
+            }
+        },
+        mounted() {
+            this.getAllUsers()
+        }
 
     }
 </script>
@@ -86,9 +93,11 @@
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        &.playstation{
+
+        &.playstation {
             background-image: url("../img/console@2x.png");
         }
+
         &.spiderman {
             background-image: url("../img/spiderman.jpg");
         }
@@ -96,12 +105,15 @@
         &.godofwar {
             background-image: url("../img/godofwar.jpg");
         }
+
         &.uncharted-colection {
             background-image: url("../img/uncharted-colection.jpg");
         }
+
         &.uncharted-4 {
             background-image: url("../img/uncharted-4.jpg");
         }
+
         &.uncharted-5 {
             background-image: url("../img/uncharted-5.jpg");
         }

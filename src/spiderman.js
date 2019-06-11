@@ -3,6 +3,7 @@ const spiderman = [
     {
         title: 'Be Greater',
         completed: false,
+        completedAll: false,
         subtitle: 'Collect all Trophies',
         type: 'platinum',
         id: '2e50f2fc-7e0a-11e9-8f9e-2a86e4085a59'

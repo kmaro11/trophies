@@ -2,6 +2,7 @@ const godofwar = [
   {
     title: 'Father and Son',
     completed: false,
+    completedAll: false,
     subtitle: 'Collect all Trophies',
     type: 'platinum',
     id: 'ae38150c-8604-11e9-a159-526af7764f64'
