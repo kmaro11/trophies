@@ -6,6 +6,7 @@
                 Home
             </router-link>
             <router-link router to="/trophies"
+                         @click.native="getAllUsers"
                          v-if="userSignIn"
                          class="flex items-center p-4 font-bold text-white hover:text-yellow">
                 Trophies
@@ -33,45 +34,22 @@
     export default {
         data() {
             return {
-                // menu: [
-                //     {
-                //         name: 'Home',
-                //         link: '',
-                //         type: 'menu',
-                //         show: true
-                //     },
-                //     {
-                //         name: 'Trophies',
-                //         link: '/trophies',
-                //         type: 'trophies',
-                //         show: true
-                //     },
-                //     {
-                //         name: 'Sign up',
-                //         link: 'sign-up/',
-                //         type: 'login',
-                //         show: true
-                //     },
-                //     {
-                //         name: 'Sign in',
-                //         link: '/sign-in',
-                //         type: 'login',
-                //         show: true
-                //     },
-                //
-                // ],
                 status: false,
             }
 
         },
         computed: {
             ...mapGetters({
-                userSignIn: 'signInStatus'
+                userSignIn: 'signInStatus',
+                userId: 'userId',
             }),
         },
         methods: {
             logout() {
                 this.$store.dispatch('logout', false)
+            },
+            getAllUsers() {
+                this.$store.dispatch('getAllTrophies', this.userId)
             }
         }
     }

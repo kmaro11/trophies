@@ -72,13 +72,11 @@
             }
         },
         methods: {
-            getAllUsers() {
-                this.$store.dispatch('getAllTrophies',)
-            }
+
         },
-        mounted() {
-            this.getAllUsers()
-        }
+        // mounted() {
+        //     this.getAllUsers()
+        // }
 
     }
 </script>

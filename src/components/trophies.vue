@@ -110,6 +110,7 @@
                 })
             },
             getFromDb() {
+                this.$store.dispatch('getAllTrophies', {user: this.userId})
                 this.$store.dispatch('getTrophies', {game: this.selectedGame.type, id: this.userId})
             },
             selectGame(game) {
@@ -121,11 +122,13 @@
             changeSelectedGameTrophies(game) {
                 this.selectedGameArray = [...this[game.type]]
             },
-            getAllData() {
-                this.$store.dispatch('getAllTrophies', {game: this.selectedGame.type})
-            }
+            // getAllData() {
+            //     this.$store.dispatch('getAllTrophies', {user: this.userId})
+            // }
 
         },
+        mounted() {
+        }
     }
 
 </script>
