@@ -30,6 +30,7 @@
                      class="w-16 trophies__background-img m-2 text-white text-3xl flex justify-center items-center cursor-pointer"
                      :class="game.type">
                     <div>{{game.name}}</div>
+                    <div>{{filterTrophiesCounter(game.type)}}</div>
 
                 </div>
             </div>
@@ -122,6 +123,9 @@
             changeSelectedGameTrophies(game) {
                 this.selectedGameArray = [...this[game.type]]
             },
+            filterTrophiesCounter (game){
+                return game
+            }
 
         },
 
