@@ -33,6 +33,7 @@
 
                 </div>
             </div>
+
         </div>
         <transition name="slide-fade">
             <Sidebar :progressBar="progressBar"
@@ -70,14 +71,16 @@
         },
         computed: {
             ...mapGetters({
-                dataFromDb: 'dataFromDb',
+                allTrophies: 'getAllUserData',
                 allGame: 'allGames',
                 selectedGame: 'selectedGame',
                 userId: 'userId',
                 userSignIn: 'signInStatus',
                 filterOption: 'filterOption'
             }),
-
+            chosenGamesTrophies() {
+                return this.allTrophies.filter(item => item.name === this.selectedGame.type).map(trophies => trophies.trophies)
+            },
             completedTrophiesId() {
                 return (this.selectedGameArray.filter(item => item.completed)).map(x => x.id)
             },
@@ -87,9 +90,11 @@
             },
             filterTrophies() {
                 this.selectedGameArray.forEach(item => {
-                    if (this.dataFromDb.includes(item.id)) {
-                        item.completed = true
-                    }
+                    this.chosenGamesTrophies.map(trophies => {
+                        if (trophies.includes(item.id)) {
+                            item.completed = true
+                        }
+                    })
                 })
                 if (this.filterOption === 'completed') {
                     return this.selectedGameArray.filter(action => action.completed)
@@ -109,26 +114,17 @@
                     id: this.userId
                 })
             },
-            getFromDb() {
-                this.$store.dispatch('getAllTrophies', {user: this.userId})
-                this.$store.dispatch('getTrophies', {game: this.selectedGame.type, id: this.userId})
-            },
             selectGame(game) {
                 this.$store.commit('changeGame', game)
                 this.changeSelectedGameTrophies(game)
-                this.getFromDb()
 
             },
             changeSelectedGameTrophies(game) {
                 this.selectedGameArray = [...this[game.type]]
             },
-            // getAllData() {
-            //     this.$store.dispatch('getAllTrophies', {user: this.userId})
-            // }
 
         },
-        mounted() {
-        }
+
     }
 
 </script>

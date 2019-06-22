@@ -126,23 +126,6 @@
         },
         methods: {
 
-            trophiesFromDb() {
-                this.spiderman.filter(item => {
-                    this.dataFromDb.map(dbData => {
-                        if (dbData === item.id) {
-                            item.completed = true
-                        }
-                    })
-                })
-            },
-            getFromDb() {
-                this.$store.dispatch('getTrophies', {game: this.selectedGame.type, id: this.userId})
-                this.trophiesFromDb()
-            },
-            filterTrophies(item) {
-              this.$store.commit('filterGame', item)
-                // this.$emit('filterGame', item)
-            },
             pushToDb() {
                 this.$emit('saveToDb')
             },
@@ -156,19 +139,12 @@
                     id: this.userId
                 })
             },
-            // allTrophies (type) {
-            //   return this.selectedGame.filter(action => action.type === type).length
-            // },
-            // allCompletedTrophies (type) {
-            //   return this.selectedGame.filter(action => (action.type === type && action.completed)).length
-            // },
             getUser() {
                 this.$store.dispatch('getUsernames', this.userId)
             }
         },
         created() {
             this.getUser()
-            // this.allCompletedTrophies()
         }
     }
 </script>

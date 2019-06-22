@@ -13,7 +13,6 @@ export default new Vuex.Store({
         userLogout: false,
         userSignIn: false,
         pushStatus: Boolean,
-        dbData: [],
         userId: '',
         games: [
             {
@@ -29,7 +28,8 @@ export default new Vuex.Store({
         createdName: false,
         usernamesFromDb: [],
         userName: '',
-        filteredOption: 'all'
+        filteredOption: 'all',
+        allTrophies: []
     },
     mutations: {
         setUser(state, payload) {
@@ -43,9 +43,6 @@ export default new Vuex.Store({
         },
         submitTrophie(state, payload) {
             state.pushStatus = payload
-        },
-        retrivedData(state, payload) {
-            state.dbData = payload
         },
         signInUserId(state, payload) {
             state.userId = payload
@@ -73,6 +70,9 @@ export default new Vuex.Store({
             console.log(option)
             state.filteredOption = option
         },
+        allUserTrophies(state, data){
+            state.allTrophies = data
+        }
     },
     actions: {
         signUserUp({commit}, payload) {
@@ -116,24 +116,14 @@ export default new Vuex.Store({
             })
                 .catch(error => console.log(error))
         },
-        getTrophies({commit}, {game, id}) {
-            db.collection(id).doc(game).get()
-                .then(data => {
-                    let dbData = data.data().trophies
-                    commit('retrivedData', dbData)
-                }).catch(
-                error => {
-                    console.log('error', error)
-                })
-        },
         getAllTrophies({commit}, user) {
             db.collection(user).get()
                 .then(data => {
                     let allData = []
                     data.forEach(item => {
-                        allData.push(item.data())
-                        console.log(allData)
+                        allData.push({name: item.id, trophies: item.data().trophies})
                     })
+                    commit('allUserTrophies', allData)
                 })
         },
         createUserName({commit}, {id, userName}) {
@@ -169,9 +159,6 @@ export default new Vuex.Store({
         signInStatus(state) {
             return state.userSignIn
         },
-        dataFromDb(state) {
-            return state.dbData
-        },
         allGames(state) {
             return state.games
         },
@@ -186,6 +173,9 @@ export default new Vuex.Store({
         },
         filterOption(state) {
             return state.filteredOption
+        },
+        getAllUserData(state){
+            return state.allTrophies
         }
 
     }
